@@ -1,7 +1,7 @@
 const express = require('express');
-const User = require('../Models/userModel');
+const User = require('../models/userModel');
 
-var upload = require('../Middleware/Multer');
+var upload = require('../middleware/Multer');
 
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
@@ -41,7 +41,6 @@ router.post('/signupuser', upload.single("image"), [
 
     // Create a new user
     user = await User.create({
- 
       name: req.body.name,
       email: req.body.email,
       number: req.body.number,
