@@ -17,7 +17,7 @@ const JWT_SECRET = 'iiitv-icd';
 const { isValidObjectId, mailRegex, isValid, teamnameRegex } = require("../validators/validations");
 
 
-// ROUTE 1: Create a User using: POST "/api/createuser". No login required
+// ROUTE 1:Create a User using: POST "/api/createuser". No login required
 router.post('/signupuser',[
 	body('name', 'Enter a valid Last name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
