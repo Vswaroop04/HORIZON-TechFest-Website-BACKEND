@@ -16,7 +16,7 @@ app.use(
     extended: true,
   })
 );
-//mongodb+srv://iiitvicd:iiitv123@cluster0.lgokxw0.mongodb.net/TechFest?retryWrites=true&w=majority
+// 
 mongoose.connect('mongodb+srv://iiitvicd:iiitv123@cluster0.lgokxw0.mongodb.net/TechFest?retryWrites=true&w=majority' , {
   useNewUrlParser: true,
   useUnifiedTopology: true

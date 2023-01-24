@@ -18,13 +18,7 @@ const { isValidObjectId, mailRegex, isValid, teamnameRegex } = require("../valid
 
 
 // ROUTE 1:Create a User using: POST "/api/createuser". No login required
-router.post('/signupuser',[
-	body('name', 'Enter a valid Last name').isLength({ min: 3 }),
-    body('email', 'Enter a valid email').isEmail(),
-    body('number', 'Enter a valid Mobile').isLength({ min: 9 }),
-    body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),
-    body('institute', 'institute name must be atleast 5 letters').isLength({ min: 5 }),
-], upload.single("proof"), async (req, res) => {
+router.post('/signupuser', upload.single("proof"), async (req, res) => {
 	// If there are errors, return Bad request and the errors
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -67,7 +61,15 @@ router.post('/signupuser',[
 		let success = true;
 
 		// res.json(user)
-		res.json({ success, authtoken })
+		let u={
+			"data":{
+				"user":{
+					"name":user.name,
+					"email":user.email,
+				}
+			}
+		}
+		res.json({ success, authtoken, user:u })
 		console.log("Signed up");
 
 
@@ -112,7 +114,15 @@ router.post('/loginuser', [
 		const authtoken = jwt.sign(data, JWT_SECRET);
 		console.log(authtoken);
 		success = true;
-		res.json({ success, authtoken })
+		let u={
+			"data":{
+				"user":{
+					"name":user.name,
+					"email":user.email,
+				}
+			}
+		}
+		res.json({ success, authtoken, user:u })
 
 	} catch (error) {
 		console.error(error.message);
