@@ -19,6 +19,7 @@ const { isValidObjectId, mailRegex, isValid, teamnameRegex } = require("../valid
 
 // ROUTE 1:Create a User using: POST "/api/createuser". No login required
 router.post('/signupuser', upload.single("proof"), async (req, res) => {
+	var url= req.protocol + '://' + req.get('host') + req.originalUrl;
 	// If there are errors, return Bad request and the errors
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -28,7 +29,7 @@ router.post('/signupuser', upload.single("proof"), async (req, res) => {
 	
 	if (req.file) {
 
-		var filepath = req.file.originalname;
+		var filepath = url+"/"+req.filename;
 		console.log(filepath);
 
 	}
@@ -49,7 +50,8 @@ router.post('/signupuser', upload.single("proof"), async (req, res) => {
 			number: req.body.number,
 			institute: req.body.institute,
 			password: secPass,
-			image: filepath
+			image: filepath,
+			avatar:"Avatar1"
 		});
 		const data = {
 			user: {
@@ -79,6 +81,18 @@ router.post('/signupuser', upload.single("proof"), async (req, res) => {
 	}
 })
 
+router.post('/profile/avatar',fetchuser,async (req,res)=>{
+	var userid=req.user.id;
+	try{
+		const user = await users.findOne({ _id: userid });
+		user.set({ avatar: req.body.avatar });
+		await user.save();
+		return res.send({ status: true, message: "Avatar Changed Successfully" });
+	}catch(error) {
+		console.error(error.message);
+		res.status(500).send("Internal Server Error");
+	}
+})
 
 router.post('/loginuser', [
 	body('email', 'Enter a valid email').isEmail(),
@@ -134,6 +148,7 @@ router.post('/loginuser', [
 
 
 router.get("/userdashboard", fetchuser, async (req, res) => {
+	console.log("hi");
 	const userid = req.user.id;
 
 	try {
@@ -192,7 +207,7 @@ router.get("/userdashboard", fetchuser, async (req, res) => {
 			else indpart.push(part);
 		}
 
-		return res.send({status:true, name: user.name, indpart, teampart, });
+		return res.send({status:true, name: user.name, indpart, teampart, avatar:user.avatar});
 	}
 	catch (error) {
 		console.error(error.message);

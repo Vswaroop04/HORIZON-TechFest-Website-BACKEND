@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    avatar:{
+        type: String,
+        required: true
+    },
     participation: {
         type: [{
             eventid: {
